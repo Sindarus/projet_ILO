@@ -1,0 +1,6 @@
+mai 17, 2016 3:40:52 PM logger.LoggerFactory getLogger
+INFOS: log file created
+mai 17, 2016 3:40:52 PM logger.LoggerFactory getLogger
+INFOS: Logger ready
+mai 17, 2016 3:41:55 PM chat.client.ServerHandler run
+AVERTISSEMENT: ServerHandler: could not read message with serverInOS
