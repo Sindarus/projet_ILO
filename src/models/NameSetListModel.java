@@ -1,36 +1,20 @@
 package models;
 
+import javax.swing.*;
 import java.util.Iterator;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
-import javax.swing.AbstractListModel;
-
-/**
- * ListModel contenant des noms uniques (toujours trié grâce à un TreeSet par
- * exemple).
- * L'accès à la liste de noms doit être thread safe (c'àd : plusieurs threads
- * peuvent accéder concurrentiellement à la liste de noms sans que celle ci se
- * retrouve dans un état incohérent) : Les modifications du Set interne se font
- * toujours dans un bloc synchronized(nameSet) {...}.
- * L'ajout ou le retrait d'un élément dans l'ensemble de nom est accompagné
- * d'un fireContentsChanged sur l'ensemble des éléments de la liste (à cause
- * du tri implicite des éléments) ce qui permet au List Model de notifier
- * tout widget dans lequel serait contenu ce ListModel.
- * @see {@link javax.swing.AbstractListModel}
- */
-public class NameSetListModel extends AbstractListModel<String>
-{
-	/**
-	 * Ensemble de noms triés
-	 */
-	private SortedSet<String> nameSet;
+public class NameSetListModel extends AbstractListModel<String> {
+    private SortedSet<String> nameSet;
 
 	/**
 	 * Constructeur
 	 */
 	public NameSetListModel()
 	{
-		// TODO nameSet = ...
+		// Done nameSet = ...
+		nameSet = new TreeSet<>();
 	}
 
 	/**
@@ -45,7 +29,21 @@ public class NameSetListModel extends AbstractListModel<String>
 	public boolean add(String value)
 	{
 		// TODO Replace with implementation ...
-		return false;
+		Iterator origine = nameSet.iterator();
+
+		if(value!=null )
+		{
+			while(origine.hasNext())
+			{
+				if(origine.next() == value) 
+			   	return false;
+			}
+			nameSet.add(value);
+            return true;
+		}
+        else{
+            return false;
+        }
 	}
 
 	/**
@@ -56,6 +54,7 @@ public class NameSetListModel extends AbstractListModel<String>
 	public boolean contains(String value)
 	{
 		// TODO Replace with implementation ...
+		nameSet.contains(value);
 		return false;
 	}
 
@@ -70,6 +69,17 @@ public class NameSetListModel extends AbstractListModel<String>
 	public boolean remove(int index)
 	{
 		// TODO Replace with implementation ...
+		Iterator value = nameSet.iterator();
+		int count = 0;
+		while(value.hasNext())
+		{
+			if(count == index) break;
+			else
+				count++;
+			value.next();
+		}
+		nameSet.remove(value);
+
 		return false;
 	}
 
@@ -82,6 +92,8 @@ public class NameSetListModel extends AbstractListModel<String>
 	public void clear()
 	{
 		// TODO Complete ...
+		nameSet.clear();
+		fireContentsChanged(this, 0, this.getSize());
 	}
 
 	/**
@@ -93,12 +105,12 @@ public class NameSetListModel extends AbstractListModel<String>
 	public int getSize()
 	{
 		// TODO Replace with implementation ...
-		return 0;
+		return nameSet.size();
 	}
 
 	/**
 	 * Accesseur à l'élément indexé
-	 * @param l'index de l'élément recherché
+	 * @param index de l'élément recherché
 	 * @return la chaine de caractère correponsdant à l'élément recherché ou
 	 * bien null si celui ci n'existe pas
 	 * @see javax.swing.ListModel#getElementAt(int)
@@ -107,27 +119,42 @@ public class NameSetListModel extends AbstractListModel<String>
 	public String getElementAt(int index)
 	{
 		// TODO Replace with implementation ...
+		Iterator value = nameSet.iterator();
+		int count = 0;
+		while(value.hasNext())
+		{
+			if(count == index) 
+			   return (String) value.next();
+			else
+				count++;
+			value.next();
+		}
+		
 		return null;
 	}
 
-	/**
-	 * Représentation sous forme de chaine de caractères de la liste de
-	 * noms unique et triés.
-	 * @return une chaine de caractères représetant la liste des noms uniques
-	 * et triés
-	 */
-	@Override
-	public String toString()
-	{
-		StringBuilder sb = new StringBuilder();
-		for (Iterator<String> it = nameSet.iterator(); it.hasNext();)
-		{
-			sb.append(it.next());
-			if (it.hasNext())
-			{
-				sb.append(", ");
-			}
-		}
-		return sb.toString();
-	}
+    /**
+     * Représentation sous forme de chaine de caractères de la liste de
+     * noms unique et triés.
+     * @return une chaine de caractères représetant la liste des noms uniques
+     * et triés
+     */
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        for (Iterator<String> it = nameSet.iterator(); it.hasNext();)
+        {
+            sb.append(it.next());
+            if (it.hasNext())
+            {
+                sb.append(", ");
+            }
+        }
+        return sb.toString();
+    }
+    
+    public void sort(){
+
+    }
 }
